@@ -28,34 +28,33 @@ class Encrypter:
     def get3(self, i, r1, r2, l):
         x = i
 
-        
-        # for k in self.keys:
-            # x += k
+        for j in range(0, len(self.keys), 5):
+            x += (r1 + self.key) * self.keys[j]
+            x -= self.keys[j + 1] * self.key
+            x += (self.keys[j + 2] + self.key) * len(self.keys)
+            x -= (self.keys[j + 3] + l) * self.keys[j + 4]
 
-        for j in range(len(self.keys)):
-            if j % 2 == 0:
-                x += (self.keys[j] + 1) * r1
-            else:
-                x -= (self.keys[j] + 1) * r2
-        
-        x += l
-            
-   
+        x += l + r2
+
+
+
         return li[x % len(li)]
     
 
     def get3_o(self, i, r1, r2, l):
         x = i
 
-        x -= l
+        x -= (l + r2)
 
-        for j in range(len(self.keys) - 1, -1, -1):
-            if j % 2 == 0:
-                x -= int((self.keys[j] + 1) * r1)
-            else:
-                x += (self.keys[j] + 1) * r2
+        for j in range(0, len(self.keys), 5):
+            x += (self.keys[j + 3] + l) * self.keys[j + 4]
+            x -= (self.keys[j + 2] + self.key) * len(self.keys)
+            x += self.keys[j + 1] * self.key
+            x -= (r1 + self.key) * self.keys[j]
+
+            
         
-        return li[x % len(li)]
+        return li[int(x) % len(li)]
 
     
 
@@ -66,7 +65,7 @@ class Encrypter:
         s = f.read()
 
         for t in s:
-            self.keys.append(ord(t) * self.key)
+            self.keys.append(int(t) + self.key)
 
 
     def __init__(self, key: str, key_path: str):
