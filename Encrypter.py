@@ -29,9 +29,9 @@ class Encrypter:
         x = i
 
         for j in range(0, len(self.keys), 5):
-            x += (r1 + self.key) * self.keys[j]
-            x -= self.keys[j + 1] * self.key
-            x += (self.keys[j + 2] + self.key) * len(self.keys)
+            x += (r1 + self.key) * (self.keys[j] - r2)
+            x -= self.keys[j + 1] * (self.key - l)
+            x += (self.keys[j + 2] + (self.key * r1)) * len(self.keys)
             x -= (self.keys[j + 3] + l) * self.keys[j + 4]
 
         x += l + r2
@@ -48,9 +48,9 @@ class Encrypter:
 
         for j in range(0, len(self.keys), 5):
             x += (self.keys[j + 3] + l) * self.keys[j + 4]
-            x -= (self.keys[j + 2] + self.key) * len(self.keys)
-            x += self.keys[j + 1] * self.key
-            x -= (r1 + self.key) * self.keys[j]
+            x -= (self.keys[j + 2] + (self.key * r1)) * len(self.keys)
+            x += self.keys[j + 1] * (self.key - l)
+            x -= (r1 + self.key) * (self.keys[j] - r2)
 
             
         
