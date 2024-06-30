@@ -1,11 +1,12 @@
 from Encrypter import Encrypter
+from os import system
 
 # key
 
 if __name__ == "__main__":
 
     i = input("key, path: ").split(' ')
-    path = "key"
+    path = "KEY"
 
     if len(i) == 2:
         path = i[1]
@@ -54,6 +55,9 @@ if __name__ == "__main__":
 
             print()
 
+
+        elif command == "clear":
+            system("clear")
 
         else:
             print("command not found")
