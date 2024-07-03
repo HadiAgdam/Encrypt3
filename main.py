@@ -46,7 +46,7 @@ if __name__ == "__main__":
 
         elif command.startswith("cp"):
             print()
-            en = e.encrypt(command[4:])
+            en = e.encrypt(command[3:])
             copy(en[0])
             timer.start()
             print(en[0])
