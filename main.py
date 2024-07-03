@@ -1,7 +1,14 @@
 from Encrypter import Encrypter
 from os import system
+from pyperclip import copy
+from threading import Timer
 
-# key
+
+def clearClipBoard():
+    copy("")
+
+timer = Timer(10, clearClipBoard, ())
+
 
 if __name__ == "__main__":
 
@@ -32,6 +39,16 @@ if __name__ == "__main__":
         elif command.startswith("e"):
             print()
             en = e.encrypt(command[2:])
+            print(en[0])
+            print(en[1], en[2])
+            print()
+        
+
+        elif command.startswith("cp"):
+            print()
+            en = e.encrypt(command[4:])
+            copy(en[0])
+            timer.start()
             print(en[0])
             print(en[1], en[2])
             print()
