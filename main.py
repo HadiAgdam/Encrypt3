@@ -7,7 +7,7 @@ from threading import Timer
 def clearClipBoard():
     copy("")
 
-timer = Timer(10, clearClipBoard, ())
+
 
 
 if __name__ == "__main__":
@@ -45,6 +45,7 @@ if __name__ == "__main__":
         
 
         elif command.startswith("cp"):
+            timer = Timer(10, clearClipBoard, ())
             print()
             en = e.encrypt(command[3:])
             copy(en[0])
