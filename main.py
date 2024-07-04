@@ -2,6 +2,7 @@ from Encrypter import Encrypter
 from os import system
 from pyperclip import copy
 from threading import Timer
+from random import randint
 
 
 def clearClipBoard():
@@ -18,8 +19,11 @@ if __name__ == "__main__":
     if len(i) == 2:
         path = i[1]
 
-    keys = input("keys :").split(' ')
-    e = Encrypter(i[0], path, keys)
+    keys = input("keys :")
+    if keys == '':
+        keys = f"{randint(1, 100)} {randint(1, 100)}"
+        print(f"{keys.split(' ')[0]} {keys.split(' ')[1]}")
+    e = Encrypter(i[0], path, keys.split(' '))
     print()
     while True:
         command = input("command :")
