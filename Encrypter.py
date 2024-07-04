@@ -22,24 +22,34 @@ def get_index(e):
 
 
 class Encrypter:
+
     keys = []
 
-
-    def get3(self, i, r1, r2, l):
+    def e(self, i, j):
         x = i
 
         for j in range(0, len(self.keys), 5):
-            x += (r1 + self.key) * (self.keys[j] - r2)
-            x -= self.keys[j + 1] * (self.key - l)
-            x += (self.keys[j + 2] + (self.key * r1)) * len(self.keys)
-            x -= (self.keys[j + 3] + l) * self.keys[j + 4]
+            x += (self.r[j % len(self.r)] + self.key) * (self.keys[j] - self.r[j % len(self.r)])
+            x -= self.keys[j + 1] * (self.key - j)
+            x += (self.keys[j + 2] + (self.key * self.r[j % len(self.r)])) * len(self.keys)
+            x -= (self.keys[j + 3] + j) * self.keys[j + 4]
 
-        x += l + r2
-
-
-
+        
         return li[x % len(li)]
     
+
+    def d(self, i, j):
+        x = i
+
+        for j in range(0, len(self.keys), 5):
+            x += (self.keys[j + 3] + j) * self.keys[j + 4]
+            x -= (self.keys[j + 2] + (self.key * self.r[j % len(self.r)])) * len(self.keys)
+            x += self.keys[j + 1] * (self.key - j)
+            x -= (self.r[j % len(self.r)] + self.key) * (self.keys[j] - self.r[j % len(self.r)])
+
+        
+        return li[int(x) % len(li)]
+
 
     def get3_o(self, i, r1, r2, l):
         x = i
@@ -56,8 +66,6 @@ class Encrypter:
         
         return li[int(x) % len(li)]
 
-    
-
 
     def initKeys(self, key_path: str):
         f = open(key_path)
@@ -68,23 +76,20 @@ class Encrypter:
             self.keys.append(int(t) + self.key)
 
 
-    def __init__(self, key: str, key_path: str):
+    def __init__(self, key: str, key_path: str, keys: list):
         a = 0
         for i in key:
             a += ord(i)
         self.key = a * len(key) + 1
         
         self.initKeys(key_path)
+        self.r = []
+        for k in keys:
+            self.r.append(int(k))
 
 
-
-    def encrypt(self, text: str, r1: int = -1, r2: int = -1):
-        if r1 == -1:
-            r1 = randint(0, len(li) - 1)
-        if r2 == -1:
-            r2 = randint(0, len(li) - 1)
-        
-        result = get(r1)
+    def encrypt(self, text: str):
+        result = ""
 
         for j in range(0, len(text)):
             t = text[j]
@@ -92,12 +97,10 @@ class Encrypter:
             if not i:
                 result += t
                 continue
-            result += self.get3(i, r1, r2, j + 1)
-        
-        result += get(r2)
+            result += self.e(i, j)
 
+        return result
 
-        return result, r1, r2
 
     def decrypt(self, text: str):
 
@@ -133,6 +136,17 @@ class Encrypter:
                 result3 += t
                 continue
             result3 += self.get3_o(j, r1, r2, i)
+
+        
+        # Encrypt 4
+        result4 = ""
+        for i in range(0, len(text)):
+            t = text[i]
+            j = get_index(t)
+            if not j:
+                result4 += t
+                continue
+            result4 += self.d(j, i)
         
 
-        return result1, result2, result3
+        return result1, result2, result3, result4
